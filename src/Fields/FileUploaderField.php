@@ -8,7 +8,7 @@ class FileUploaderField extends AbstractField
     {
         $readonly = $this->attributes['readonly'] ?? '';
         $value = $this->attributes['value'] ?? '';
-        $uploadUrl = $this->attributes['upload_url'] ?? route('file-uploader.upload');
+        $uploadUrl = $this->attributes['upload_url'] ?? route('file.upload');
         $acceptedFiles = $this->attributes['accepted_files'] ?? '*';
         $fieldId = $this->name . '_file_uploader';
         $hiddenId = $this->name . '_file_url';
@@ -117,6 +117,7 @@ class FileUploaderField extends AbstractField
             $s .= 'progressBox.style.display = "none";';
             $s .= 'messageBox.innerHTML = \'<span style="color: red;">\' + \'Network error.\' + \'</span>\';';
             $s .= '};';
+            $s .= 'xhr.setRequestHeader(\"X-CSRF-TOKEN\", document.querySelector(\'meta[name="csrf-token"]\').content);';
             $s .= 'xhr.send(formData);';
             $s .= '}';
             $s .= '})();';
