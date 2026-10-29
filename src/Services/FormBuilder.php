@@ -12,6 +12,7 @@ use MyFormBuilder\Fields\TextareaField;
 use MyFormBuilder\Fields\SubmitField;
 use MyFormBuilder\Fields\FieldFactory;
 use MyFormBuilder\Fields\FileField;
+use MyFormBuilder\Fields\FileUploaderField;
 use MyFormBuilder\Fields\CheckboxField;
 use MyFormBuilder\Fields\DivField;
 use MyFormBuilder\Fields\EntityField;
@@ -274,6 +275,13 @@ class FormBuilder
         $attributes = $attributes ?? [];
 
         return (new SearchableInputField($name, $attributes))->render();
+    }
+
+    public function fileUploader(string $name, array $attributes = []): self
+    {
+        $attributes = $attributes ?? [];
+
+        return (new FileUploaderField($name, $attributes))->render();
     }
 
     public function submit($text = 'Submit', $attributes = []): self

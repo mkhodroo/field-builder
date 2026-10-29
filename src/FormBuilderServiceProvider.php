@@ -26,6 +26,7 @@ class FormBuilderServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/form-builder'),
-        ], 'form-builder-views');
+            __DIR__ . '/../resources/css'   => public_path('vendor/form-builder/css'),
+        ], 'form-builder-assets');
     }
 }

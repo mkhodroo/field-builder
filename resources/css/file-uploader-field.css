@@ -1,0 +1,76 @@
+/* File Uploader Field - Modern Styles */
+.file-uploader-box {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background: #fafafa;
+    transition: all 0.3s ease;
+    margin: 10px 0;
+}
+
+.file-uploader-box.dragover {
+    border-color: #4a90e2;
+    background: #f0f7ff;
+}
+
+.file-uploader-drop-zone {
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+}
+
+.file-uploader-drop-zone i {
+    font-size: 48px;
+    color: #4a90e2;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.file-uploader-drop-zone.dragover {
+    color: #4a90e2;
+}
+
+.file-uploader-progress {
+    margin-top: 12px;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.file-uploader-progress-bar {
+    height: 100%;
+    background: #4a90e2;
+    width: 0%;
+    transition: width 0.2s ease;
+}
+
+.file-uploader-message {
+    margin-top: 10px;
+    font-size: 13px;
+    min-height: 18px;
+}
+
+.file-uploader-preview {
+    margin: 10px 0;
+    padding: 12px;
+    background: #e8f5e9;
+    border-radius: 6px;
+    border: 1px solid #4caf50;
+    display: inline-block;
+}
+
+.file-uploader-download-link {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.file-uploader-download-link:hover {
+    text-decoration: underline;
+}
+
+.file-uploader-download-link i {
+    margin-right: 6px;
+}
