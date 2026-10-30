@@ -13,33 +13,41 @@ class FileUploaderField extends AbstractField
         $fieldId = $this->name . '_file_uploader';
         $hiddenId = $this->name . '_file_url';
 
-        $s = '<div class="form-group">';
+        $s = '<div class="file-uploader-wrapper">';
         $s .= '<label>';
         $s .= trans('fields.' . $this->name);
         if ($this->attributes['required'] == 'on' && $readonly != 'on') {
-            $s .= ' <span class="text-danger">*</span>';
+            $s .= ' <span class="required">*</span>';
         }
-        $s .= '</label><br>';
+        $s .= '</label>';
 
         if ($value && is_string($value)) {
             $downloadUrl = str_contains($value, 'http') ? $value : url($value);
             $s .= '<div class="file-uploader-preview" id="' . $fieldId . '_preview">';
+            $s .= '<div class="file-uploader-preview-header">';
+            $s .= '<i class="fa fa-file-o file-uploader-preview-icon"></i>';
+            $s .= '<span class="file-uploader-preview-name">' . basename($value) . '</span>';
+            $s .= '</div>';
+            $s .= '<div class="file-uploader-preview-actions">';
             $s .= '<a href="' . $downloadUrl . '" target="_blank" download class="file-uploader-download-link">';
-            $s .= '<i class="fa fa-download"></i> ' . trans('fields.Download') . ' ' . basename($value);
+            $s .= '<i class="fa fa-download"></i> ' . trans('fields.Download');
             $s .= '</a>';
-            $s .= '</div><br>';
+            $s .= '</div>';
+            $s .= '</div>';
         }
 
         if ($readonly == 'on') {
+            $s .= '<div class="file-uploader-readonly">';
+            $s .= e($value ?: 'بدون فایل');
+            $s .= '</div>';
             $s .= '<input type="hidden" name="' . $this->name . '" value="' . e($value) . '">';
         } else {
             $s .= '<div class="file-uploader-box" id="' . $fieldId . '_box">';
-            $s .= '<div class="file-uploader-drop-zone" id="' . $fieldId . '_dropzone">';
-            $s .= '<i class="fa fa-cloud-upload-alt"></i><br>';
-            $s .= trans('fields.Click_to_upload_or_drag_file');
-            $s .= '</div>';
-            $s .= '<input type="file" id="' . $fieldId . '_input" accept="' . e($acceptedFiles) . '" style="display: none;">';
-            $s .= '<div class="file-uploader-progress" id="' . $fieldId . '_progress" style="display: none;">';
+            $s .= '<i class="fa fa-cloud-upload-alt file-uploader-icon"></i>';
+            $s .= '<span class="file-uploader-text">' . trans('fields.Click_to_upload_or_drag_file') . '</span>';
+            $s .= '<span class="file-uploader-hint">' . trans('fields.Or_drag_and_drop_here') . '</span>';
+            $s .= '<input type="file" id="' . $fieldId . '_input" class="file-uploader-input" accept="' . e($acceptedFiles) . '">';
+            $s .= '<div class="file-uploader-progress" id="' . $fieldId . '_progress">';
             $s .= '<div class="file-uploader-progress-bar" id="' . $fieldId . '_progress_bar"></div>';
             $s .= '</div>';
             $s .= '<div class="file-uploader-message" id="' . $fieldId . '_message"></div>';
@@ -52,7 +60,7 @@ class FileUploaderField extends AbstractField
 
             $s .= '<script>';
             $s .= '(function() {';
-            $s .= 'var dropZone = document.getElementById("' . $fieldId . '_dropzone");';
+            $s .= 'var box = document.getElementById("' . $fieldId . '_box");';
             $s .= 'var fileInput = document.getElementById("' . $fieldId . '_input");';
             $s .= 'var progressBox = document.getElementById("' . $fieldId . '_progress");';
             $s .= 'var progressBar = document.getElementById("' . $fieldId . '_progress_bar");';
@@ -61,11 +69,11 @@ class FileUploaderField extends AbstractField
             $s .= 'var previewBox = document.getElementById("' . $fieldId . '_preview");';
             $s .= 'var uploadUrl = "' . $uploadUrl . '";';
 
-            $s .= 'dropZone.addEventListener("click", function() { fileInput.click(); });';
-            $s .= 'dropZone.addEventListener("dragover", function(e) { e.preventDefault(); dropZone.classList.add("dragover"); });';
-            $s .= 'dropZone.addEventListener("dragleave", function() { dropZone.classList.remove("dragover"); });';
-            $s .= 'dropZone.addEventListener("drop", function(e) {';
-            $s .= 'e.preventDefault(); dropZone.classList.remove("dragover");';
+            $s .= 'box.addEventListener("click", function() { fileInput.value = ""; fileInput.click(); });';
+            $s .= 'box.addEventListener("dragover", function(e) { e.preventDefault(); box.classList.add("dragover"); });';
+            $s .= 'box.addEventListener("dragleave", function() { box.classList.remove("dragover"); });';
+            $s .= 'box.addEventListener("drop", function(e) {';
+            $s .= 'e.preventDefault(); box.classList.remove("dragover");';
             $s .= 'var files = e.dataTransfer.files;';
             $s .= 'if (files.length) handleFile(files[0]);';
             $s .= '});';
@@ -76,6 +84,8 @@ class FileUploaderField extends AbstractField
 
             $s .= 'function handleFile(file) {';
             $s .= 'messageBox.innerHTML = "";';
+            $s .= 'messageBox.className = "file-uploader-message info";';
+            $s .= 'messageBox.textContent = "در حال آپلود...";';
             $s .= 'progressBox.style.display = "block";';
             $s .= 'progressBar.style.width = "0%";';
 
@@ -87,7 +97,7 @@ class FileUploaderField extends AbstractField
             $s .= 'xhr.open("POST", uploadUrl, true);';
             $s .= 'xhr.upload.onprogress = function(e) {';
             $s .= 'if (e.lengthComputable) {';
-            $s .= 'var percent = (e.loaded / e.total) * 100;';
+            $s .= 'var percent = Math.round((e.loaded / e.total) * 100);';
             $s .= 'progressBar.style.width = percent + "%";';
             $s .= '}';
             $s .= '};';
@@ -99,25 +109,31 @@ class FileUploaderField extends AbstractField
             $s .= 'if (response.url) {';
             $s .= 'hiddenInput.value = response.url;';
             $s .= 'if (previewBox) {';
-            $s .= 'previewBox.innerHTML = \'<a href="\' + response.url + \'" target="_blank" download class="file-uploader-download-link"><i class="fa fa-download"></i> \' + \'download\': \' + file.name + \'</a>\';';
+            $s .= 'previewBox.innerHTML = \'<div class="file-uploader-preview-header"><i class="fa fa-file-o file-uploader-preview-icon"></i><span class="file-uploader-preview-name">\' + file.name + \'</span></div><div class="file-uploader-preview-actions"><a href="\' + response.url + \'" target="_blank" download class="file-uploader-download-link"><i class="fa fa-download"></i> \' + file.name + \'</a></div>\';';
             $s .= 'previewBox.style.display = "block";';
             $s .= '}';
-            $s .= 'messageBox.innerHTML = \'<span style="color: green;">\' + \'Upload successful.\' + \'</span>\';';
+            $s .= 'messageBox.innerHTML = "\' + trans("fields.Upload_successful") + \'";';
+            $s .= 'messageBox.className = "file-uploader-message success";';
             $s .= '} else if (response.error) {';
-            $s .= 'messageBox.innerHTML = \'<span style="color: red;">\' + response.error + \'</span>\';';
+            $s .= 'messageBox.innerHTML = response.error;';
+            $s .= 'messageBox.className = "file-uploader-message error";';
             $s .= '}';
             $s .= '} catch (err) {';
-            $s .= 'messageBox.innerHTML = \'<span style="color: red;">\' + \'Invalid server response.\' + \'</span>\';';
+            $s .= 'messageBox.innerHTML = "\' + trans("fields.Invalid_server_response") + \'";';
+            $s .= 'messageBox.className = "file-uploader-message error";';
             $s .= '}';
             $s .= '} else {';
-            $s .= 'messageBox.innerHTML = \'<span style="color: red;">\' + \'Upload error.\' + \'</span>\';';
+            $s .= 'messageBox.innerHTML = "\' + trans("fields.Upload_error") + \'";';
+            $s .= 'messageBox.className = "file-uploader-message error";';
             $s .= '}';
             $s .= '};';
             $s .= 'xhr.onerror = function() {';
             $s .= 'progressBox.style.display = "none";';
-            $s .= 'messageBox.innerHTML = \'<span style="color: red;">\' + \'Network error.\' + \'</span>\';';
+            $s .= 'messageBox.innerHTML = "\' + trans("fields.Network_error") + \'";';
+            $s .= 'messageBox.className = "file-uploader-message error";';
             $s .= '};';
-            $s .= 'xhr.setRequestHeader(\"X-CSRF-TOKEN\", document.querySelector(\'meta[name="csrf-token"]\').content);';
+            $s .= 'var csrfMeta = document.querySelector(\'meta[name="csrf-token"]\');';
+            $s .= 'if (csrfMeta) xhr.setRequestHeader("X-CSRF-TOKEN", csrfMeta.content);';
             $s .= 'xhr.send(formData);';
             $s .= '}';
             $s .= '})();';
