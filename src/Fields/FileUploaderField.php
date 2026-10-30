@@ -40,7 +40,7 @@ class FileUploaderField extends AbstractField
             $s .= '<div class="file-uploader-readonly">';
             $s .= e($value ?: 'بدون فایل');
             $s .= '</div>';
-            $s .= '<input type="hidden" name="' . $this->name . '" value="' . e($value) . '">';
+            $s .= '<input type="hidden" name="' . $this->name . '" id="' . $this->name . '" value="' . e($value) . '">';
         } else {
             $s .= '<div class="file-uploader-box" id="' . $fieldId . '_box">';
             $s .= '<i class="fa fa-cloud-upload-alt file-uploader-icon"></i>';
@@ -52,7 +52,7 @@ class FileUploaderField extends AbstractField
             $s .= '</div>';
             $s .= '<div class="file-uploader-message" id="' . $fieldId . '_message"></div>';
             $s .= '</div>';
-            $s .= '<input type="hidden" name="' . $this->name . '" id="' . $hiddenId . '" ';
+            $s .= '<input type="hidden" name="' . $this->name . '" id="' . $this->name . '" ';
             if ($value) {
                 $s .= 'value="' . e($value) . '" ';
             }
