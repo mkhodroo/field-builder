@@ -58,6 +58,8 @@ class FileUploaderField extends AbstractField
             }
             $s .= '>';
 
+            $s .= $css;
+
             $s .= '<script>';
             $s .= '(function() {';
             $s .= 'var box = document.getElementById("' . $fieldId . '_box");';
