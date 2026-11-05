@@ -15,7 +15,7 @@ class SelectMultipleField extends AbstractField
             $s .= ' <span class="text-danger">*</span>';
         }
         $s .= '</label>';
-        $s .= '<select name="' . $this->name . '[]" class="form-control select2" multiple="multiple" ';
+        $s .= '<select name="' . $this->name . '" class="form-control select2" multiple="multiple" ';
         foreach ($this->attributes as $key => $value) {
             if ($key == 'required') {
                 if ($value == 'on') {
