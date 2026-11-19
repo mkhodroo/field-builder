@@ -13,12 +13,14 @@ class DateTimeField extends AbstractField
         $fieldValueAlt = isset($this->attributes['valueAlt']) ? $this->attributes['valueAlt'] : '';
 
         $s = '<div class="form-group">';
-        $s .= '<label>';
-        $s .= trans('fields.' . $this->name);
-        if ($this->attributes['required'] == 'on' && $this->attributes['readonly'] != 'on') {
-            $s .= ' <span class="text-danger">*</span>';
+        if ($showLabel) {
+            $s .= '<label>';
+            $s .= trans('fields.' . $this->name);
+            if ($this->attributes['required'] == 'on' && $this->attributes['readonly'] != 'on') {
+                $s .= ' <span class="text-danger">*</span>';
+            }
+            $s .= '</label>';
         }
-        $s .= '</label>';
         $s .= "<input type='text' name='$name' id='$id' dir='ltr'";
 
 
